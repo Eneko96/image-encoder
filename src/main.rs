@@ -53,7 +53,10 @@ fn decode_image(buf: &[u8]) -> DynamicImage {
 
 fn main() {
     let path = std::env::args().nth(1).expect("No path given");
-    let img = image::open(path).expect("Error opening image");
+    let name = std::path::Path::new(&path).file_name().expect("Invalid path");
+    let name_str = name.to_str().expect("Invalid path");
+    let name_no_ext = name_str.split('.').next().expect("Invalid path");
+    let img = image::open(&path).expect("Error opening image");
     println!("Encode or decode? (e/d)");
 
     let mut input = String::new();
@@ -63,12 +66,14 @@ fn main() {
     if input == "e" {
         let scrambled = scramble_pixels(&img, 123); // use some salt value
         let buf = encode_image(&scrambled);
-        std::fs::write("image2.png", buf).unwrap();
+        std::fs::write(format!("{}-scrambled.png", name_no_ext), buf).unwrap();
+        println!("Saved scrambled image as {}-scrambled.png", name_no_ext);
     } else if input == "d" {
-        let buf = std::fs::read("image2.png").unwrap();
+        let buf = std::fs::read(format!("{}.png", name_no_ext)).unwrap();
         let img2 = decode_image(&buf);
         let unscrambled = unscramble_pixels(&img2, 123); // use the same salt value
-        unscrambled.save("image3.png").unwrap(); // Save to a different file to compare
+        unscrambled.save(format!("{}-unscrambled.png", name_no_ext)).unwrap();  
+        println!("Saved unscrambled image as {}-unscrambled.png", name_no_ext);
     } else {
         println!("Invalid input");
     }
