@@ -2,12 +2,12 @@
 
 Algorithm for encoding and decoding an image, it just turns this:
 
-![Before](public/image.png)
+![Before](https://raw.githubusercontent.com/Eneko96/image-encoder/main/public/image.png)
 
 To this:
 
-![Before](public/image2.png)
+![Encoded](https://raw.githubusercontent.com/Eneko96/image-encoder/main/public/image2.png)
 
 and again, to this:
 
-![Before](public/image3.png)
+![Decoded](https://raw.githubusercontent.com/Eneko96/image-encoder/main/public/image3.png)
