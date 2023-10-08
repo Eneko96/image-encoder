@@ -64,14 +64,23 @@ fn main() {
     let input = input.trim();
 
     if input == "e" {
-        let scrambled = scramble_pixels(&img, 123); // use some salt value
+        let mut salt = String::new();
+        println!("Enter salt value (integer):");
+        std::io::stdin().read_line(&mut salt).unwrap();
+        // transform salt to number
+        let salt: u32 = salt.trim().parse().unwrap();
+        let scrambled = scramble_pixels(&img, salt); // use some salt value
         let buf = encode_image(&scrambled);
         std::fs::write(format!("{}-scrambled.png", name_no_ext), buf).unwrap();
         println!("Saved scrambled image as {}-scrambled.png", name_no_ext);
     } else if input == "d" {
+        let mut salt = String::new();
+        println!("Enter salt value (integer):");
+        std::io::stdin().read_line(&mut salt).unwrap();
+        let salt: u32 = salt.trim().parse().unwrap();
         let buf = std::fs::read(format!("{}.png", name_no_ext)).unwrap();
         let img2 = decode_image(&buf);
-        let unscrambled = unscramble_pixels(&img2, 123); // use the same salt value
+        let unscrambled = unscramble_pixels(&img2, salt); // use the same salt value
         unscrambled.save(format!("{}-unscrambled.png", name_no_ext)).unwrap();  
         println!("Saved unscrambled image as {}-unscrambled.png", name_no_ext);
     } else {
